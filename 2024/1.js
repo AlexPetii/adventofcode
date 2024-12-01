@@ -11,6 +11,21 @@ function calculateTotalDistance(leftList, rightList) {
   return totalDistance;
 }
 
+function calculateSimilarityScore(leftList, rightList) {
+  const rightFrequency = {};
+  rightList.forEach((num) => {
+    rightFrequency[num] = (rightFrequency[num] || 0) + 1;
+  });
+
+  let similarityScore = 0;
+  leftList.forEach((num) => {
+    if (rightFrequency[num]) {
+      similarityScore += num * rightFrequency[num];
+    }
+  });
+  return similarityScore;
+}
+
 fs.readFile("input.txt", "utf8", (err, data) => {
   if (err) {
     console.log("error readFile: ", err);
@@ -30,5 +45,7 @@ fs.readFile("input.txt", "utf8", (err, data) => {
     });
 
   const result = calculateTotalDistance(leftList, rightList);
+  const similarityScore = calculateSimilarityScore(leftList, rightList);
   console.log(result);
+  console.log(similarityScore);
 });
