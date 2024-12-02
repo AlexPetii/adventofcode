@@ -1,8 +1,6 @@
 const fs = require("fs");
 
-function isReportSafe(report) {
-  const levels = report.split(" ").map(Number);
-
+function isReportSafe(levels) {
   let isIncreasing = true;
   let isDecreasing = true;
 
@@ -17,14 +15,32 @@ function isReportSafe(report) {
   return isIncreasing || isDecreasing;
 }
 
+function canBeSafe(levels) {
+  for (let i = 0; i < levels.length; i++) {
+    const modifiedLevels = levels.slice(0, i).concat(levels.slice(i + 1));
+
+    if (isReportSafe(modifiedLevels)) {
+      return true;
+    }
+  }
+}
+
 fs.readFile("input.txt", "utf8", (err, data) => {
   if (err) {
     console.log("error readFile: ", err);
     return;
   }
-  const reports = data.trim().split("\n");
+  const reports = data
+    .trim()
+    .split("\n")
+    .map((line) => line.split(" ").map(Number));
 
   const safeReportCount = reports.filter(isReportSafe).length;
 
+  const canBeSafeReportCount = reports.filter(
+    (levels) => isReportSafe(levels) || canBeSafe(levels)
+  ).length;
+
   console.log("Safe Report: ", safeReportCount);
+  console.log("Can be save Report: ", canBeSafeReportCount);
 });
