@@ -1,4 +1,4 @@
-import * as fs from "node:fs";
+import * as fs from "node:fs/promises";
 
 function countXMAS(grid: string[][]): number {
   const rows = grid.length;
@@ -21,18 +21,21 @@ function countXMAS(grid: string[][]): number {
   return count;
 }
 
-fs.readFile("input.txt", "utf8", (err, data) => {
-  if (err) {
+async function main() {
+  try {
+    const data = await fs.readFile("input.txt", "utf8");
+
+    const grid: string[][] = data
+      .trim()
+      .split("\n")
+      .map((line) => line.trim().split(""));
+
+    const result = countXMAS(grid);
+
+    console.log("Total X-MAS: ", result);
+  } catch (err) {
     console.log("Error readFile ", err);
-    return;
   }
+}
 
-  const grid: string[][] = data
-    .trim()
-    .split("\n")
-    .map((line) => line.trim().split(""));
-
-  const result = countXMAS(grid);
-
-  console.log("Total X-MAS: ", result);
-});
+main();
