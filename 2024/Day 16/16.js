@@ -62,4 +62,9 @@ function part1() {
   return solve(data).score;
 }
 
+function part2(){
+    return solve(data).titles
+}
+
 console.log(part1());
+console.log(part2())
